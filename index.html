@@ -108,28 +108,5 @@
       <button onclick="window.location.reload()">Order Again</button>
     </div>
   </div>
-
-  <script>
-    const form = document.getElementById('orderForm');
-    const successMessage = document.getElementById('successMessage');
-
-    form.addEventListener('submit', function (e) {
-      e.preventDefault();
-
-      const formData = new FormData(form);
-
-      fetch("https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse", {
-        method: "POST",
-        mode: "no-cors",
-        body: formData
-      }).then(() => {
-        form.style.display = "none";
-        successMessage.style.display = "block";
-      }).catch((err) => {
-        alert("Something went wrong, please try again.");
-        console.error(err);
-      });
-    });
-  </script>
 </body>
 </html>
