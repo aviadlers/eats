@@ -54,15 +54,20 @@
       background-color: #333;
     }
     .success {
+      display: none;
+      text-align: center;
+    }
+    .success-box {
       margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
+      padding: 20px;
+      border-radius: 12px;
       background-color: #fff5e1;
       color: #4b3b0a;
       border: 1px solid #f0c36d;
-      display: none;
       font-weight: bold;
-      text-align: center;
+    }
+    .hidden {
+      display: none;
     }
   </style>
 </head>
@@ -71,63 +76,75 @@
     <div class="logo">
       <img src="logo.jpg" alt="Adler Eats Logo">
     </div>
-    <h2>Place Your Order</h2>
-    <form 
-      action="https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse" 
-      method="POST" 
-      target="_blank">
 
-      <label for="name">Full Name</label>
-      <input type="text" name="entry.1234567890" id="name" required>
+    <div id="formSection">
+      <h2>Place Your Order</h2>
+      <form id="orderForm">
+        <label for="name">Full Name</label>
+        <input type="text" name="entry.1234567890" id="name" required>
 
-      <label for="contact">Contact Number</label>
-      <input type="tel" name="entry.2345678901" id="contact" required>
+        <label for="contact">Contact Number</label>
+        <input type="tel" name="entry.2345678901" id="contact" required>
 
-      <label for="meal">Select Your Meal</label>
-      <select name="entry.3456789012" id="meal" required>
-        <option value="Fries only — K25">Fries only — K25</option>
-        <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
-        <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
-        <option value="Fries + Coleslaw + Sausage — K65">Fries + Coleslaw + Sausage — K65</option>
-      </select>
+        <label for="meal">Select Your Meal</label>
+        <select name="entry.3456789012" id="meal" required>
+          <option value="Fries only — K25">Fries only — K25</option>
+          <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
+          <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
+          <option value="Fries + Coleslaw + Sausage — K65">Fries + Coleslaw + Sausage — K65</option>
+        </select>
 
-      <label for="quantity">Quantity</label>
-      <select name="entry.4567890123" id="quantity">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
+        <label for="quantity">Quantity</label>
+        <select name="entry.4567890123" id="quantity">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+        </select>
 
-      <label for="notes">Additional Notes</label>
-      <textarea name="entry.5678901234" id="notes" rows="3" placeholder="Optional..."></textarea>
+        <label for="notes">Additional Notes</label>
+        <textarea name="entry.5678901234" id="notes" rows="3" placeholder="Optional..."></textarea>
 
-      <button type="submit">Submit Order</button>
-    </form>
-      <!-- ✅ Success Message -->
-       <div class="success" id="successMessage">Your order has been submitted successfully! You will receive a confirmation shortly </div>
+        <button type="submit">Submit Order</button>
+      </form>
     </div>
-  
-    <script>
-      const form = document.getElementById('orderForm');
-      const successMessage = document.getElementById('successMessage');
-  
-      form.addEventListener('submit', async function(e) {
-        e.preventDefault();
-        const formData = new FormData(form);
-        try {
-          await fetch('https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse', {
-            method: 'POST',
-            mode: 'no-cors',
-            body: formData
-          });
-          form.reset();
-          successMessage.style.display = 'block';
-        } catch (error) {
-          alert('Something went wrong. Please try again.');
-        }
-      });
-    </script>
-  </body>
-  </html>
+
+    <div class="success" id="successSection">
+      <div class="success-box">
+        Your order has been submitted successfully!
+        You will soon receive a confirmation
+      </div>
+      <button onclick="orderAgain()">Order Again</button>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('orderForm');
+    const formSection = document.getElementById('formSection');
+    const successSection = document.getElementById('successSection');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      try {
+        await fetch('https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse', {
+          method: 'POST',
+          mode: 'no-cors',
+          body: formData
+        });
+        form.reset();
+        formSection.style.display = 'none';
+        successSection.style.display = 'block';
+      } catch (error) {
+        alert('Something went wrong. Please try again.');
+      }
+    });
+
+    function orderAgain() {
+      successSection.style.display = 'none';
+      formSection.style.display = 'block';
+    }
+  </script>
+</body>
+</html>
