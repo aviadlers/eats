@@ -53,6 +53,17 @@
     button:hover {
       background-color: #333;
     }
+    .success {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background-color: #fff5e1;
+      color: #4b3b0a;
+      border: 1px solid #f0c36d;
+      display: none;
+      font-weight: bold;
+      text-align: center;
+    }
   </style>
 </head>
 <body>
@@ -94,6 +105,29 @@
 
       <button type="submit">Submit Order</button>
     </form>
-  </div>
-</body>
-</html>
+      <!-- ✅ Success Message -->
+       <div class="success" id="successMessage">Your order has been submitted successfully! You will receive a confirmation shortly </div>
+    </div>
+  
+    <script>
+      const form = document.getElementById('orderForm');
+      const successMessage = document.getElementById('successMessage');
+  
+      form.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        const formData = new FormData(form);
+        try {
+          await fetch('https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse', {
+            method: 'POST',
+            mode: 'no-cors',
+            body: formData
+          });
+          form.reset();
+          successMessage.style.display = 'block';
+        } catch (error) {
+          alert('Something went wrong. Please try again.');
+        }
+      });
+    </script>
+  </body>
+  </html>
