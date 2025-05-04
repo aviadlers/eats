@@ -7,29 +7,35 @@
   <style>
     body {
       background-color: #f7ebd9;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      color: #000;
+      font-family: 'Segoe UI', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
     }
-    .container {
+    .container, .success-message, .welcome-screen {
       max-width: 500px;
-      margin: auto;
+      margin: 50px auto;
       background-color: white;
       padding: 30px;
       border-radius: 15px;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    }
-    .logo {
+      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
       text-align: center;
-      margin-bottom: 20px;
+      animation: fadeInUp 1s ease;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(50px); }
+      to { opacity: 1; transform: translateY(0); }
     }
     .logo img {
-      max-width: 180px;
+      max-width: 160px;
+      margin-bottom: 20px;
     }
+    .hidden { display: none; }
     label {
       font-weight: bold;
       display: block;
       margin-top: 15px;
+      text-align: left;
     }
     input, select, textarea {
       width: 100%;
@@ -38,6 +44,11 @@
       border-radius: 8px;
       border: 1px solid #ccc;
       font-size: 1em;
+      transition: 0.3s ease;
+    }
+    input:focus, select:focus, textarea:focus {
+      border-color: #000;
+      box-shadow: 0 0 5px rgba(0,0,0,0.3);
     }
     button {
       margin-top: 20px;
@@ -49,82 +60,144 @@
       border: none;
       border-radius: 8px;
       cursor: pointer;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
     button:hover {
       background-color: #333;
+      transform: scale(1.05);
     }
-    .success {
-      margin-top: 20px;
-      padding: 15px;
-      border-radius: 8px;
-      background-color: #fff5e1;
-      color: #4b3b0a;
-      border: 1px solid #f0c36d;
-      display: none;
-      font-weight: bold;
-      text-align: center;
+    .confetti {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 999;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="logo">
-      <img src="logo.jpg" alt="Adler Eats Logo">
-    </div>
-    <h2>Place Your Order</h2>
-    <form id="orderForm">
-      <label for="name">Full Name</label>
-      <input type="text" name="entry.1234567890" id="name" required>
 
-      <label for="contact">Contact Number</label>
-      <input type="tel" name="entry.2345678901" id="contact" required>
-
-      <label for="meal">Select Your Meal</label>
-      <select name="entry.3456789012" id="meal" required>
-        <option value="Fries only — K25">Fries only — K25</option>
-        <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
-        <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
-        <option value="Fries + Coleslaw + Sausage — K65">Fries + Coleslaw + Sausage — K65</option>
-      </select>
-
-      <label for="quantity">Quantity</label>
-      <select name="entry.4567890123" id="quantity">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-      </select>
-
-      <label for="notes">Additional Notes</label>
-      <textarea name="entry.5678901234" id="notes" rows="3" placeholder="Optional..."></textarea>
-
-      <button type="submit">Submit Order</button>
-    </form>
-
-    <!-- ✅ Success Message -->
-    <div class="success" id="successMessage">✅ Your order has been submitted successfully!</div>
+<!-- Welcome Screen -->
+<div class="welcome-screen" id="welcome">
+  <div class="logo">
+    <img src="logo.jpg" alt="Adler Eats Logo" />
   </div>
+  <h1>Welcome to Adler Eats!</h1>
+  <p>Ready to satisfy your cravings?</p>
+  <button onclick="startOrder()">Start Your Order</button>
+</div>
 
-  <script>
-    const form = document.getElementById('orderForm');
-    const successMessage = document.getElementById('successMessage');
+<!-- Order Form -->
+<div class="container hidden" id="orderForm">
+  <h2>Place Your Order</h2>
 
-    form.addEventListener('submit', async function(e) {
-      e.preventDefault();
-      const formData = new FormData(form);
-      try {
-        await fetch('https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse', {
-          method: 'POST',
-          mode: 'no-cors',
-          body: formData
-        });
-        form.reset();
-        successMessage.style.display = 'block';
-      } catch (error) {
-        alert('Something went wrong. Please try again.');
-      }
-    });
-  </script>
+  <form
+    action="https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse"
+    method="POST"
+    target="hidden_iframe"
+    onsubmit="handleSubmit();">
+
+    <label for="name">Full Name</label>
+    <input type="text" id="name" name="entry.794091550" required />
+
+    <label for="contact">Contact Number</label>
+    <input type="tel" id="contact" name="entry.1899558012" required />
+
+    <label for="meal">Select Your Meal</label>
+    <select id="meal" name="entry.1337519154" required>
+      <option value="Fries only — K25">Fries only — K25</option>
+      <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
+      <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
+      <option value="Fries + Coleslaw + Sausage — K65">Fries + Coleslaw + Sausage — K65</option>
+    </select>
+
+    <label for="quantity">Quantity</label>
+    <select id="quantity" name="entry.1986352020">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+    </select>
+
+    <label for="notes">Additional Notes</label>
+    <textarea id="notes" name="entry.937581746" rows="3" placeholder="Optional..."></textarea>
+
+    <button type="submit">Submit Order</button>
+  </form>
+</div>
+
+<!-- Success Message -->
+<div class="success-message hidden" id="success">
+  <h2>🎉 Order Placed Successfully!</h2>
+  <p>Thank you for ordering with Adler Eats.</p>
+  <button onclick="orderAgain()">Order Again</button>
+</div>
+
+<!-- Hidden iframe -->
+<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="formSubmitted()"></iframe>
+
+<!-- Confetti -->
+<canvas class="confetti hidden" id="confettiCanvas"></canvas>
+
+<script>
+  function startOrder() {
+    document.getElementById('welcome').classList.add('hidden');
+    document.getElementById('orderForm').classList.remove('hidden');
+  }
+
+  let submitted = false;
+  function handleSubmit() {
+    submitted = true;
+    setTimeout(() => {
+      document.getElementById("orderForm").classList.add("hidden");
+      document.getElementById("success").classList.remove("hidden");
+      launchConfetti();
+    }, 1000);
+  }
+
+  function formSubmitted() {
+    if (submitted) {
+      submitted = false;
+      // Triggered after form submission via iframe
+    }
+  }
+
+  function orderAgain() {
+    document.getElementById('success').classList.add('hidden');
+    document.getElementById('orderForm').classList.remove('hidden');
+  }
+
+  function launchConfetti() {
+    const canvas = document.getElementById('confettiCanvas');
+    const ctx = canvas.getContext('2d');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    canvas.classList.remove('hidden');
+
+    let particles = Array.from({ length: 100 }, () => ({
+      x: Math.random() * canvas.width,
+      y: Math.random() * -canvas.height,
+      size: Math.random() * 10 + 5,
+      color: `hsl(${Math.random() * 360}, 100%, 60%)`,
+      speed: Math.random() * 3 + 2
+    }));
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, p.size, p.size);
+        p.y += p.speed;
+      });
+    }
+
+    let interval = setInterval(draw, 30);
+    setTimeout(() => {
+      clearInterval(interval);
+      canvas.classList.add('hidden');
+    }, 3000);
+  }
+</script>
 </body>
 </html>
