@@ -84,7 +84,7 @@
   <div class="logo">
     <img src="logo.jpg" alt="Adler Eats Logo" />
   </div>
-  <h1>Welcome to Adler Eats!</h1>
+  <h1 style="text-align:center;">Welcome to Adler Eats!</h1>
   <p>Ready to satisfy your cravings?</p>
   <button onclick="startOrder()">Start Your Order</button>
 </div>
@@ -92,21 +92,15 @@
 <!-- Order Form -->
 <div class="container hidden" id="orderForm">
   <h2>Place Your Order</h2>
-
-  <form
-    action="https://docs.google.com/forms/d/e/1FAIpQLSdCGkglrqDpf_K8-EsScNKDBuRVJFbWVx_ildBN5H1P3hGa7g/formResponse"
-    method="POST"
-    target="hidden_iframe"
-    onsubmit="handleSubmit();">
-
+  <form id="adlerOrderForm" onsubmit="submitOrder(event)">
     <label for="name">Full Name</label>
-    <input type="text" id="name" name="entry.794091550" required />
+    <input type="text" id="name" required />
 
     <label for="contact">Contact Number</label>
-    <input type="tel" id="contact" name="entry.1899558012" required />
+    <input type="tel" id="contact" required />
 
     <label for="meal">Select Your Meal</label>
-    <select id="meal" name="entry.1337519154" required>
+    <select id="meal" required>
       <option value="Fries only — K25">Fries only — K25</option>
       <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
       <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
@@ -114,14 +108,14 @@
     </select>
 
     <label for="quantity">Quantity</label>
-    <select id="quantity" name="entry.1986352020">
+    <select id="quantity">
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
     </select>
 
     <label for="notes">Additional Notes</label>
-    <textarea id="notes" name="entry.937581746" rows="3" placeholder="Optional..."></textarea>
+    <textarea id="notes" rows="3" placeholder="Optional..."></textarea>
 
     <button type="submit">Submit Order</button>
   </form>
@@ -134,33 +128,46 @@
   <button onclick="orderAgain()">Order Again</button>
 </div>
 
-<!-- Hidden iframe -->
-<iframe name="hidden_iframe" id="hidden_iframe" style="display:none;" onload="formSubmitted()"></iframe>
-
 <!-- Confetti -->
 <canvas class="confetti hidden" id="confettiCanvas"></canvas>
 
 <script>
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyk4XFQY9o-aPTvm4THG6Q_TsyAiUbgX570sy1_O36CicQIlo-8l24C1zgQ3EZe47rh/exec";
+
   function startOrder() {
     document.getElementById('welcome').classList.add('hidden');
     document.getElementById('orderForm').classList.remove('hidden');
   }
 
-  let submitted = false;
-  function handleSubmit() {
-    submitted = true;
-    setTimeout(() => {
+  function submitOrder(event) {
+    event.preventDefault();
+
+    const orderData = {
+      name: document.getElementById("name").value,
+      contact: document.getElementById("contact").value,
+      meal: document.getElementById("meal").value,
+      quantity: document.getElementById("quantity").value,
+      notes: document.getElementById("notes").value
+    };
+
+    fetch(scriptURL, {
+      method: "POST",
+      body: JSON.stringify(orderData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+    .then(res => res.json())
+    .then(response => {
+      console.log("Success!", response);
       document.getElementById("orderForm").classList.add("hidden");
       document.getElementById("success").classList.remove("hidden");
       launchConfetti();
-    }, 1000);
-  }
-
-  function formSubmitted() {
-    if (submitted) {
-      submitted = false;
-      // Triggered after form submission via iframe
-    }
+    })
+    .catch(error => {
+      console.error("Error!", error.message);
+      alert("There was a problem placing your order. Please try again.");
+    });
   }
 
   function orderAgain() {
@@ -199,5 +206,6 @@
     }, 3000);
   }
 </script>
+
 </body>
 </html>
