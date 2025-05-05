@@ -92,7 +92,7 @@
 <!-- Order Form -->
 <div class="container hidden" id="orderForm">
   <h2>Place Your Order</h2>
-  <form id="adlerOrderForm" onsubmit="submitOrder(event)">
+  <form id="adlerOrderForm" onsubmit="handleSubmit(event)">
     <label for="name">Full Name</label>
     <input type="text" id="name" required />
 
@@ -112,12 +112,12 @@
       <option value="1">1</option>
       <option value="2">2</option>
       <option value="3">3</option>
-      <option value="4">3</option>
+      <option value="4">4</option>
       <option value="5">5</option>
     </select>
 
     <label for="notes">Additional Notes</label>
-    <textarea id="notes" rows="3" placeholder="Optional..."></textarea>
+    <textarea id="notes" rows="3" placeholder="Add any special instructions or preferences (optional)"></textarea>
 
     <button type="submit">Submit Order</button>
   </form>
@@ -160,7 +160,10 @@
       },
       body: JSON.stringify(orderData)
     })
-    .then(res => res.json())
+    .then(res => {
+      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      return res.json();
+    })
     .then(data => {
       if (data.result === "success") {
         document.getElementById("orderForm").classList.add("hidden");
@@ -175,6 +178,11 @@
       console.error("Fetch error:", err);
       alert("There was a problem placing your order.");
     });
+  }
+
+  function launchConfetti() {
+    // Add your confetti logic here or include an external confetti library
+    console.log("Confetti launched!");
   }
 
   document.addEventListener("DOMContentLoaded", () => {
