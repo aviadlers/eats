@@ -2,196 +2,224 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Adler Eats Order Form</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Adler Eats</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
     body {
-      background-color: #f7ebd9;
-      font-family: 'Segoe UI', sans-serif;
       margin: 0;
-      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      background-color: #fdf3e4;
+      color: #333;
+      text-align: center;
       overflow-x: hidden;
     }
-    .container, .success-message, .welcome-screen {
-      max-width: 500px;
-      margin: 50px auto;
-      background-color: white;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
-      text-align: center;
-      animation: fadeInUp 1s ease;
+    .container {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 2rem;
     }
-    @keyframes fadeInUp {
-      from { opacity: 0; transform: translateY(50px); }
-      to { opacity: 1; transform: translateY(0); }
+    .page {
+      display: none;
     }
-    .logo img {
-      max-width: 160px;
-      margin-bottom: 20px;
-    }
-    .hidden { display: none; }
-    label {
-      font-weight: bold;
+    .active {
       display: block;
-      margin-top: 15px;
-      text-align: left;
+    }
+    .menu-item {
+      background: white;
+      padding: 1rem;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      margin-bottom: 1rem;
+      cursor: pointer;
+      transition: transform 0.2s ease-in-out;
+      font-size: 1.1rem;
+    }
+    .menu-item:hover {
+      transform: scale(1.05);
+      animation: pulse 0.5s;
+    }
+    .menu-item.selected {
+      border: 2px solid #ff9800;
+      background-color: #fff3e0;
+    }
+    button {
+      background-color: black;
+      color: white;
+      padding: 1rem 2rem;
+      font-size: 1rem;
+      border: none;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+    button:hover {
+      opacity: 0.9;
     }
     input, select, textarea {
       width: 100%;
-      padding: 10px;
-      margin-top: 5px;
-      border-radius: 8px;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
       border: 1px solid #ccc;
-      font-size: 1em;
-      transition: 0.3s ease;
-    }
-    input:focus, select:focus, textarea:focus {
-      border-color: #000;
-      box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    }
-    button {
-      margin-top: 20px;
-      background-color: black;
-      color: white;
-      padding: 12px;
-      width: 100%;
-      font-size: 1em;
-      border: none;
       border-radius: 8px;
-      cursor: pointer;
-      transition: transform 0.2s ease, background-color 0.3s ease;
+      font-size: 1rem;
     }
-    button:hover {
-      background-color: #333;
-      transform: scale(1.05);
+    .price-display {
+      font-weight: bold;
+      margin-top: 0.5rem;
+      color: #e65100;
+      font-size: 1.1rem;
     }
-    .confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      z-index: 999;
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
     }
   </style>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
 </head>
 <body>
+  <div class="container">
+    <!-- Home Page -->
+    <div id="home" class="page active animate__animated animate__fadeIn">
+      <div style="max-width: 500px; margin: 2rem auto; background-color: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
+        <div class="logo">
+          <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
+        </div>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: #ff6f00;">Welcome to Adler Eats!</h1>
+        <p style="font-size: 1.1rem; color: #555;">Ready to satisfy your cravings?</p>
+        <button onclick="showPage('order')" style="margin-top: 1.5rem; background-color: #ff9800;">Start Your Order 🍟</button>
+      </div>
+    </div>
 
-<!-- Welcome Screen -->
-<div class="welcome-screen" id="welcome">
-  <div class="logo">
-    <img src="logo.jpg" alt="Adler Eats Logo" />
+    <!-- Order Page -->
+    <div id="order" class="page animate__animated">
+      <div style="background: linear-gradient(to bottom, #fffaf0, #ffe9c4); border-radius: 16px; padding: 2rem 1rem;">
+        <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: #e65100;" class="animate__animated animate__fadeInDown">🍴 Place Your Order</h2>
+        <p class="animate__animated animate__fadeIn" style="margin-bottom: 1.5rem;">Let your taste buds celebrate! 🎊</p>
+
+        <div class="menu-item animate__animated animate__fadeInUp" onclick="selectItem(this, '🍟 Fries', 25)">🍟 Fries - K25</div>
+        <div class="menu-item animate__animated animate__fadeInUp" onclick="selectItem(this, '🥗🍟 Fries + Coleslaw', 35)">🥗🍟 Fries + Coleslaw - K35</div>
+        <div class="menu-item animate__animated animate__fadeInUp" onclick="selectItem(this, '🌭🍟 Fries + Sausage', 55)">🌭🍟 Fries + Sausage - K55</div>
+        <div class="menu-item animate__animated animate__fadeInUp" onclick="selectItem(this, '🌭🥗🍟 Fries + Coleslaw + Sausage', 65)">🌭🥗🍟 Fries + Coleslaw + Sausage - K65</div>
+
+        <img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" alt="Fries Icon" style="width: 80px; margin: 1rem auto;" />
+
+        <select id="quantity" onchange="updatePrice()">
+          <option value="1">Qty: 1</option>
+          <option value="2">Qty: 2</option>
+          <option value="3">Qty: 3</option>
+          <option value="4">Qty: 4</option>
+          <option value="5">Qty: 5</option>
+        </select>
+
+        <input type="text" id="name" placeholder="👤 Your Name"/>
+        <input type="text" id="contact" placeholder="📞 WhatsApp Number (e.g. +260...)"/>
+        <textarea id="notes" placeholder="📝 Additional Notes (optional)"></textarea>
+        <div id="totalPrice" class="price-display"></div>
+        <button onclick="submitOrder()" style="margin-top: 1rem; background-color: #e65100;">Submit Order 🍽️</button>
+      </div>
+    </div>
+
+    <!-- Confirmation Page -->
+    <div id="confirmation" class="page animate__animated animate__fadeIn">
+      <img src="https://cdn-icons-png.flaticon.com/512/2276/2276931.png" style="width: 90px; margin: 1rem auto;" alt="Success Icon">
+      <h2>Order Placed Successfully! ✅</h2>
+      <p>We’re already prepping your fries! 🍟🔥</p>
+      <button onclick="orderAgain()">Order Again 🔁</button>
+    </div>
   </div>
-  <h1 style="text-align:center;">Welcome to Adler Eats!</h1>
-  <p>Ready to satisfy your cravings?</p>
-  <button onclick="startOrder()">Start Your Order</button>
-</div>
 
-<!-- Order Form -->
-<div class="container hidden" id="orderForm">
-  <h2>Place Your Order</h2>
-  <form id="adlerOrderForm" onsubmit="handleSubmit(event)">
-    <label for="name">Full Name</label>
-    <input type="text" id="name" required />
+  <script>
+    let selectedItem = null;
 
-    <label for="contact">Contact Number</label>
-    <input type="tel" id="contact" required />
-
-    <label for="meal">Select Your Meal</label>
-    <select id="meal" required>
-      <option value="Fries only — K25">Fries only — K25</option>
-      <option value="Fries + Coleslaw — K35">Fries + Coleslaw — K35</option>
-      <option value="Fries + Sausage — K55">Fries + Sausage — K55</option>
-      <option value="Fries + Coleslaw + Sausage — K65">Fries + Coleslaw + Sausage — K65</option>
-    </select>
-
-    <label for="quantity">Quantity</label>
-    <select id="quantity">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-    </select>
-
-    <label for="notes">Additional Notes</label>
-    <textarea id="notes" rows="3" placeholder="Add any special instructions or preferences (optional)"></textarea>
-
-    <button type="submit">Submit Order</button>
-  </form>
-</div>
-
-<!-- Success Message -->
-<div class="success-message hidden" id="success">
-  <h2>🎉 Order Placed Successfully!</h2>
-  <p>Thank you for ordering with Adler Eats.</p>
-  <button onclick="orderAgain()">Order Again</button>
-</div>
-
-<!-- Confetti -->
-<canvas class="confetti hidden" id="confettiCanvas"></canvas>
-
-<script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbyH3mKZWz6LUI0AtxEdHVY-InM2syjPmIGqHnse48C0LMG2gCY9TOnZcttjju5O_YI/exec";
-
-  function handleSubmit(event) {
-    event.preventDefault();
-
-    const name = document.getElementById("name").value;
-    const contact = document.getElementById("contact").value;
-    const meal = document.getElementById("meal").value;
-    const quantity = document.getElementById("quantity").value;
-    const notes = document.getElementById("notes").value;
-
-    const orderData = {
-      name,
-      contact,
-      meal,
-      quantity,
-      notes
-    };
-
-    fetch(scriptURL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(orderData)
-    })
-    .then(res => {
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-      return res.json();
-    })
-    .then(data => {
-      if (data.result === "success") {
-        document.getElementById("orderForm").classList.add("hidden");
-        document.getElementById("success").classList.remove("hidden");
-        launchConfetti();
-      } else {
-        alert("Error placing your order.");
-        console.error(data.message);
-      }
-    })
-    .catch(err => {
-      console.error("Fetch error:", err);
-      alert("There was a problem placing your order.");
-    });
-  }
-
-  function launchConfetti() {
-    // Add your confetti logic here or include an external confetti library
-    console.log("Confetti launched!");
-  }
-
-  document.addEventListener("DOMContentLoaded", () => {
-    const form = document.querySelector("form");
-    if (form) {
-      form.addEventListener("submit", handleSubmit);
+    function showPage(id) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      const page = document.getElementById(id);
+      page.classList.add('active');
+      page.classList.add('animate__fadeIn');
     }
-  });
-</script>
 
+    function selectItem(element, name, price) {
+      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
+      element.classList.add('selected');
+      selectedItem = { name, price };
+      updatePrice();
+    }
+
+    function updatePrice() {
+      if (!selectedItem) return;
+      const qty = parseInt(document.getElementById('quantity').value);
+      const total = selectedItem.price * qty;
+      document.getElementById('totalPrice').textContent = `💰 Total: K${total}`;
+    }
+
+    function submitOrder() {
+      const name = document.getElementById('name').value.trim();
+      const contact = document.getElementById('contact').value.trim();
+      const qty = parseInt(document.getElementById('quantity').value);
+      const notes = document.getElementById('notes').value.trim();
+
+      if (!selectedItem || !name || !contact) {
+        alert('Please fill out all fields and select a menu item.');
+        return;
+      }
+
+      const total = selectedItem.price * qty;
+      const now = new Date();
+      const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      const adminPhone = '+260974867751';
+      const apiKey = '3139113';
+
+      const adminMsg = 
+        `📦 New order from ${name} at ${time} 🕒\n` +
+        `🍽️ Order: ${selectedItem.name} x${qty}\n` +
+        `💰 Total: K${total}\n` +
+        `📱 Contact: ${contact}\n` +
+        (notes ? `📝 Notes: ${notes}` : '');
+
+      const customerMsg = 
+        `✅ Hi ${name}, your order for ${selectedItem.name} x${qty} (K${total}) has been received at ${time}.` +
+        `\nWe'll be in touch shortly. Thanks for using Adler Eats! 🍟`;
+
+      fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(adminPhone)}&text=${encodeURIComponent(adminMsg)}&apikey=${apiKey}`);
+      fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(contact)}&text=${encodeURIComponent(customerMsg)}&apikey=${apiKey}`);
+
+      showPage('confirmation');
+      launchFriesConfetti(selectedItem.name);
+    }
+
+    function orderAgain() {
+      selectedItem = null;
+      document.getElementById('name').value = '';
+      document.getElementById('contact').value = '';
+      document.getElementById('quantity').value = '1';
+      document.getElementById('notes').value = '';
+      document.getElementById('totalPrice').textContent = '';
+      document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
+      showPage('order');
+    }
+
+    function launchFriesConfetti(itemName) {
+      const emoji = itemName.match(/(🍟|🌭|🥗)/g) || ['🍟'];
+      const count = 50;
+
+      for (let i = 0; i < count; i++) {
+        confetti({
+          particleCount: 1,
+          angle: Math.random() * 360,
+          spread: 70,
+          origin: { x: Math.random(), y: Math.random() - 0.2 },
+          ticks: 200,
+          shapes: ['text'],
+          scalar: 1.5,
+          gravity: 1.2,
+          drift: Math.random() - 0.5,
+          zIndex: 999,
+          text: emoji[i % emoji.length]
+        });
+      }
+    }
+  </script>
 </body>
 </html>
