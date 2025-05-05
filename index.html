@@ -134,79 +134,55 @@
 <canvas class="confetti hidden" id="confettiCanvas"></canvas>
 
 <script>
-  const scriptURL = "https://script.google.com/macros/s/AKfycbxksh9olblv93e3wdqumfpmCJFy79ZU9AqpBryP_DBeIj0NnuUpL9avBFECEl8R-Hod/exec";
+  const scriptURL = "https://script.google.com/macros/s/AKfycbyH3mKZWz6LUI0AtxEdHVY-InM2syjPmIGqHnse48C0LMG2gCY9TOnZcttjju5O_YI/exec";
 
-  function startOrder() {
-    document.getElementById('welcome').classList.add('hidden');
-    document.getElementById('orderForm').classList.remove('hidden');
-  }
-
-  function submitOrder(event) {
+  function handleSubmit(event) {
     event.preventDefault();
 
+    const name = document.getElementById("name").value;
+    const contact = document.getElementById("contact").value;
+    const meal = document.getElementById("meal").value;
+    const quantity = document.getElementById("quantity").value;
+    const notes = document.getElementById("notes").value;
+
     const orderData = {
-      name: document.getElementById("name").value,
-      contact: document.getElementById("contact").value,
-      meal: document.getElementById("meal").value,
-      quantity: document.getElementById("quantity").value,
-      notes: document.getElementById("notes").value
+      name,
+      contact,
+      meal,
+      quantity,
+      notes
     };
 
     fetch(scriptURL, {
       method: "POST",
-      body: JSON.stringify(orderData),
       headers: {
         "Content-Type": "application/json"
-      }
+      },
+      body: JSON.stringify(orderData)
     })
     .then(res => res.json())
-    .then(response => {
-      console.log("Success!", response);
-      document.getElementById("orderForm").classList.add("hidden");
-      document.getElementById("success").classList.remove("hidden");
-      launchConfetti();
+    .then(data => {
+      if (data.result === "success") {
+        document.getElementById("orderForm").classList.add("hidden");
+        document.getElementById("success").classList.remove("hidden");
+        launchConfetti();
+      } else {
+        alert("Error placing your order.");
+        console.error(data.message);
+      }
     })
-    .catch(error => {
-      console.error("Error!", error.message);
-      alert("There was a problem placing your order. Please try again.");
+    .catch(err => {
+      console.error("Fetch error:", err);
+      alert("There was a problem placing your order.");
     });
   }
 
-  function orderAgain() {
-    document.getElementById('success').classList.add('hidden');
-    document.getElementById('orderForm').classList.remove('hidden');
-  }
-
-  function launchConfetti() {
-    const canvas = document.getElementById('confettiCanvas');
-    const ctx = canvas.getContext('2d');
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-    canvas.classList.remove('hidden');
-
-    let particles = Array.from({ length: 100 }, () => ({
-      x: Math.random() * canvas.width,
-      y: Math.random() * -canvas.height,
-      size: Math.random() * 10 + 5,
-      color: `hsl(${Math.random() * 360}, 100%, 60%)`,
-      speed: Math.random() * 3 + 2
-    }));
-
-    function draw() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      particles.forEach(p => {
-        ctx.fillStyle = p.color;
-        ctx.fillRect(p.x, p.y, p.size, p.size);
-        p.y += p.speed;
-      });
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.querySelector("form");
+    if (form) {
+      form.addEventListener("submit", handleSubmit);
     }
-
-    let interval = setInterval(draw, 30);
-    setTimeout(() => {
-      clearInterval(interval);
-      canvas.classList.add('hidden');
-    }, 3000);
-  }
+  });
 </script>
 
 </body>
