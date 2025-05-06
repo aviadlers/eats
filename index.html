@@ -77,7 +77,7 @@
       font-size: 1.1rem;
     }
     .animate-bounce {
-      animation: bounce 1.5s infinite;
+      animation: bounce 3.0s infinite;
     }
     @keyframes bounce {
       0%, 100% {
@@ -103,6 +103,8 @@
   <div class="container">
     <!-- Home Page -->
     <div id="home" class="page active animate__animated animate__fadeIn">
+      <!-- Time-sensitive greeting -->
+      <h2 id="greeting" style="color: #ff9800; margin-bottom: 1rem;"></h2>
       <div style="max-width: 500px; margin: 2rem auto; background-color: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
         <div class="logo">
           <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
@@ -112,19 +114,19 @@
         <button onclick="showPage('order')" style="margin-top: 1.5rem; background-color: #ff9800;" class="animate__animated animate__pulse">Start Your Order 🍟</button>
       </div>
     </div>
-
+    
     <!-- Order Page -->
     <div id="order" class="page animate__animated">
       <div style="background: linear-gradient(to bottom, #fffaf0, #ffe9c4); border-radius: 16px; padding: 2rem 1rem;">
         <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: #e65100;" class="animate__animated animate__fadeInDown">🍴 Place Your Order</h2>
         <p class="animate__animated animate__fadeIn" style="margin-bottom: 1.5rem;">Fill the form below to order! 🎊</p>
-
+        
         <!-- Name and Contact -->
         <div class="animate__animated animate__fadeInUp">
           <input type="text" id="name" placeholder="👤 Your Name" />
           <input type="text" id="contact" placeholder="📞 WhatsApp Number (e.g. +260...)" />
         </div>
-
+        
         <!-- Menu Selection -->
         <div class="animate__animated animate__fadeInUp">
           <div class="menu-item" onclick="selectItem(this, '🍟 Fries', 25)">🍟 Fries - K25</div>
@@ -132,7 +134,7 @@
           <div class="menu-item" onclick="selectItem(this, '🌭🍟 Fries + Sausage', 55)">🌭🍟 Fries + Sausage - K55</div>
           <div class="menu-item" onclick="selectItem(this, '🌭🥗🍟 Fries + Coleslaw + Sausage', 65)">🌭🥗🍟 Fries + Coleslaw + Sausage - K65</div>
         </div>
-
+        
         <!-- Quantity and Notes -->
         <div class="animate__animated animate__fadeInUp">
           <select id="quantity" onchange="updatePrice()">
@@ -144,21 +146,21 @@
           </select>
           <textarea id="notes" placeholder="📝 Additional Notes (optional)"></textarea>
         </div>
-
+        
         <!-- Total Price and Submit -->
         <div id="totalPrice" class="price-display animate__animated animate__fadeInUp"></div>
         <button onclick="submitOrder()" style="margin-top: 1rem; background-color: #e65100;" class="animate__animated animate__fadeInUp">Submit Order 🍽️</button>
       </div>
     </div>
-
+    
     <!-- Success Page -->
     <div id="confirmation" class="page animate__animated animate__fadeIn">
       <div style="max-width: 500px; margin: 2rem auto; background-color: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
         <div class="logo">
           <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
         </div>
-        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: #27ae60;" class="animate__animated animate__bounceIn">🎉 Order Confirmed!</h2>
-        <p style="font-size: 1.1rem; color: #555;" class="animate__animated animate__fadeInUp">Your order is being prepared! 🍟🔥</p>
+        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: #ff9800;" class="animate__animated animate__bounceIn">🎉 Order Confirmed! 🎉</h2>
+        <p style="font-size: 1.1rem; color: #555;" class="animate__animated animate__fadeInUp">Your order is being prepared! 🍟🔥</p>Please stay hungry until we deliver your food!😂👌
         <button onclick="orderAgain()" style="margin-top: 1.5rem; background-color: #ff9800;" class="animate__animated animate__pulse">Order Again 🔁</button>
         <button onclick="showPage('home')" style="margin-top: 1.5rem; background-color: #444;">Back to Home 🏠</button>
       </div>
@@ -172,6 +174,19 @@
       document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
+
+    function getGreeting() {
+      const now = new Date();
+      const hour = now.getHours();
+      if (hour < 12) return "Good Morning";
+      if (hour < 18) return "Good Afternoon";
+      return "Good Evening";
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const greetingElement = document.getElementById("greeting");
+      greetingElement.textContent = getGreeting();
+    });
 
     function selectItem(element, name, price) {
       document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
@@ -205,10 +220,8 @@
       const apiKey = '3139113';
       const adminPhone = '+260974867751';
 
-      const adminMsg = 
-        `📦 New Order\n👤 Name: ${name}\n📞 Contact: ${contact}\n🍽️ Order: ${selectedItem.name} x${qty}\n💰 Total: K${total}\n⏲️ Time: ${time}\n📝 Notes: ${notes || 'None'}`;
-      const customerMsg = 
-        `✅ Hi ${name}, your order for ${selectedItem.name} x${qty} (K${total}) has been received at ${time}. We'll be in touch shortly. Thanks for using Adler Eats! 🍟`;
+      const adminMsg = `📦 New Order - Adler Eats\n👤 Name: ${name}\n📞 Contact: ${contact}\n🍽️ Order: ${selectedItem.name} x${qty}\n💰 Total: K${total}\n🕒 Time: ${time}\n📝 Notes: ${notes || 'None'}`;
+      const customerMsg = `✅ Hi ${name}, your order for ${selectedItem.name} x${qty} (K${total}) has been received at ${time}. Thanks for using Adler Eats! 🍟`;
 
       fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(adminPhone)}&text=${encodeURIComponent(adminMsg)}&apikey=${apiKey}`);
       fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(contact)}&text=${encodeURIComponent(customerMsg)}&apikey=${apiKey}`);
