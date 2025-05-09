@@ -3,46 +3,66 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Adler Eats - Order delicious food and satisfy your cravings!" />
+  <meta property="og:title" content="Adler Eats" />
+  <meta property="og:description" content="Order delicious food and satisfy your cravings!" />
+  <meta property="og:image" content="logo.jpg" />
+  <meta property="og:url" content="https://github.com/aviadlers/eats" />
   <title>Adler Eats</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
   <style>
+    :root {
+      --primary-color: #ff9800;
+      --secondary-color: #e65100;
+      --background-color: #fdf3e4;
+      --text-color: #333;
+      --hover-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+    }
+
     body {
       margin: 0;
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
-      background-color: #fdf3e4;
-      color: #333;
+      background-color: var(--background-color);
+      color: var(--text-color);
       text-align: center;
       overflow-x: hidden;
     }
+
     .container {
       max-width: 600px;
       margin: 0 auto;
       padding: 2rem;
     }
+
     .page {
       display: none;
     }
+
     .active {
       display: block;
     }
+
     .menu-item {
       background: white;
       padding: 1rem;
       border-radius: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
       margin-bottom: 1rem;
       cursor: pointer;
       transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
       font-size: 1.1rem;
     }
+
     .menu-item:hover {
       transform: scale(1.05);
-      box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+      box-shadow: var(--hover-shadow);
     }
+
     .menu-item.selected {
-      border: 2px solid #ff9800;
+      border: 2px solid var(--primary-color);
       background-color: #fff3e0;
     }
+
     button {
       background-color: black;
       color: white;
@@ -53,10 +73,12 @@
       cursor: pointer;
       transition: background-color 0.3s, transform 0.2s;
     }
+
     button:hover {
       transform: scale(1.05);
       opacity: 0.9;
     }
+
     input, select, textarea {
       width: 100%;
       padding: 0.75rem;
@@ -66,19 +88,23 @@
       font-size: 1rem;
       transition: box-shadow 0.3s;
     }
+
     input:focus, select:focus, textarea:focus {
       outline: none;
       box-shadow: 0 0 10px rgba(255, 152, 0, 0.5);
     }
+
     .price-display {
       font-weight: bold;
       margin-top: 0.5rem;
-      color: #e65100;
+      color: var(--secondary-color);
       font-size: 1.1rem;
     }
+
     .animate-bounce {
       animation: bounce 3.0s infinite;
     }
+
     @keyframes bounce {
       0%, 100% {
         transform: translateY(0);
@@ -87,6 +113,7 @@
         transform: translateY(-10px);
       }
     }
+
     @media screen and (max-width: 600px) {
       .container {
         padding: 1rem;
@@ -103,54 +130,52 @@
   <div class="container">
     <!-- Home Page -->
     <div id="home" class="page active animate__animated animate__fadeIn">
-      <!-- Time-sensitive greeting -->
-      <h2 id="greeting" style="color: #ff9800; margin-bottom: 1rem;"></h2>
+      <h2 id="greeting" style="color: var(--primary-color); margin-bottom: 1rem;" aria-label="Time-sensitive greeting"></h2>
       <div style="max-width: 500px; margin: 2rem auto; background-color: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
         <div class="logo">
-          <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
+          <img src="logo.jpg" alt="Adler Eats Logo - Delicious food delivered!" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
         </div>
-        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: #ff6f00;" class="animate__animated animate__fadeInDown">Welcome to Adler Eats!</h1>
+        <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--secondary-color);" class="animate__animated animate__fadeInDown">Welcome to Adler Eats!</h1>
         <p style="font-size: 1.1rem; color: #555;" class="animate__animated animate__fadeInUp">Ready to satisfy your cravings? 🍟🔥</p>
-        <button onclick="showPage('order')" style="margin-top: 1.5rem; background-color: #ff9800;" class="animate__animated animate__pulse">Start Your Order 🍟</button>
+        <button onclick="showPage('order')" style="margin-top: 1.5rem; background-color: var(--primary-color);" class="animate__animated animate__pulse" aria-label="Start your order">Start Your Order 🍟</button>
       </div>
     </div>
     
     <!-- Order Page -->
     <div id="order" class="page animate__animated">
       <div style="background: linear-gradient(to bottom, #fffaf0, #ffe9c4); border-radius: 16px; padding: 2rem 1rem;">
-        <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: #e65100;" class="animate__animated animate__fadeInDown">🍴 Place Your Order</h2>
+        <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--secondary-color);" class="animate__animated animate__fadeInDown">🍴 Place Your Order</h2>
         <p class="animate__animated animate__fadeIn" style="margin-bottom: 1.5rem;">Fill the form below to order! 🎊</p>
         
         <!-- Name and Contact -->
         <div class="animate__animated animate__fadeInUp">
-          <input type="text" id="name" placeholder="👤 Your Name" />
-          <input type="text" id="contact" placeholder="📞 WhatsApp Number (e.g. +260...)" />
+          <input type="text" id="name" placeholder="👤 Your Name" aria-label="Your Name" />
+          <input type="text" id="contact" placeholder="📞 WhatsApp Number (e.g. +260...)" aria-label="WhatsApp Number" />
         </div>
         
         <!-- Menu Selection -->
         <div class="animate__animated animate__fadeInUp">
-          <div class="menu-item" onclick="selectItem(this, '🍟 Fries', 25)">🍟 Fries - K25</div>
-          <div class="menu-item" onclick="selectItem(this, '🍟🍟 Fries Extra', 30)">🍟🍟 Fries Extra - K30</div>
-          <div class="menu-item" onclick="selectItem(this, '🥗🍟 Fries + Coleslaw', 35)">🥗🍟 Fries + Coleslaw - K35</div>
-          <div class="menu-item" onclick="selectItem(this, '🌭🍟 Fries + Sausage', 55)">🌭🍟 Fries + Sausage - K55</div>
-          <div class="menu-item" onclick="selectItem(this, '🌭🥗🍟 Fries + Coleslaw + Sausage', 65)">🌭🥗🍟 Fries + Coleslaw + Sausage - K65</div>
+          <div class="menu-item" onclick="selectItem(this, '🍟 Fries', 25)" aria-label="Fries">🍟 Fries - K25</div>
+          <div class="menu-item" onclick="selectItem(this, '🥗🍟 Fries + Coleslaw', 35)" aria-label="Fries + Coleslaw">🥗🍟 Fries + Coleslaw - K35</div>
+          <div class="menu-item" onclick="selectItem(this, '🌭🍟 Fries + Sausage', 55)" aria-label="Fries + Sausage">🌭🍟 Fries + Sausage - K55</div>
+          <div class="menu-item" onclick="selectItem(this, '🌭🥗🍟 Fries + Coleslaw + Sausage', 65)" aria-label="Fries + Coleslaw + Sausage">🌭🥗🍟 Fries + Coleslaw + Sausage - K65</div>
         </div>
         
         <!-- Quantity and Notes -->
         <div class="animate__animated animate__fadeInUp">
-          <select id="quantity" onchange="updatePrice()">
+          <select id="quantity" onchange="updatePrice()" aria-label="Select Quantity">
             <option value="1">Qty: 1</option>
             <option value="2">Qty: 2</option>
             <option value="3">Qty: 3</option>
             <option value="4">Qty: 4</option>
             <option value="5">Qty: 5</option>
           </select>
-          <textarea id="notes" placeholder="📝 Additional Notes (optional)"></textarea>
+          <textarea id="notes" placeholder="📝 Additional Notes (optional)" aria-label="Additional Notes"></textarea>
         </div>
         
         <!-- Total Price and Submit -->
         <div id="totalPrice" class="price-display animate__animated animate__fadeInUp"></div>
-        <button onclick="submitOrder()" style="margin-top: 1rem; background-color: #e65100;" class="animate__animated animate__fadeInUp">Submit Order 🍽️</button>
+        <button onclick="submitOrder()" style="margin-top: 1rem; background-color: var(--secondary-color);" class="animate__animated animate__fadeInUp" aria-label="Submit Order">Submit Order 🍽️</button>
       </div>
     </div>
     
@@ -158,12 +183,12 @@
     <div id="confirmation" class="page animate__animated animate__fadeIn">
       <div style="max-width: 500px; margin: 2rem auto; background-color: white; padding: 2rem; border-radius: 16px; box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);">
         <div class="logo">
-          <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
+          <img src="logo.jpg" alt="Adler Eats Logo - Delicious food delivered!" style="width: 160px; margin-bottom: 1rem; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.2));">
         </div>
-        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: #ff9800;" class="animate__animated animate__bounceIn">🎉 Order Confirmed! 🎉</h2>
-        <p style="font-size: 1.1rem; color: #555;" class="animate__animated animate__fadeInUp">Your order is being prepared! 🍟🔥</p>Please stay hungry until we deliver your food!😂👌
-        <button onclick="orderAgain()" style="margin-top: 1.5rem; background-color: #ff9800;" class="animate__animated animate__pulse">Order Again 🔁</button>
-        <button onclick="showPage('home')" style="margin-top: 1.5rem; background-color: #444;">Back to Home 🏠</button>
+        <h2 style="font-size: 2.2rem; margin-bottom: 0.5rem; color: var(--primary-color);" class="animate__animated animate__bounceIn">🎉 Order Confirmed! 🎉</h2>
+        <p style="font-size: 1.1rem; color: #555;" class="animate__animated animate__fadeInUp">Your order is being prepared! 🍟🔥</p>
+        <button onclick="orderAgain()" style="margin-top: 1.5rem; background-color: var(--primary-color);" class="animate__animated animate__pulse" aria-label="Order Again">Order Again 🔁</button>
+        <button onclick="showPage('home')" style="margin-top: 1.5rem; background-color: #444;" aria-label="Back to Home">Back to Home 🏠</button>
       </div>
     </div>
   </div>
@@ -185,10 +210,56 @@
     }
 
     document.addEventListener("DOMContentLoaded", () => {
-      const greetingElement = document.getElementById("greeting");
-      greetingElement.textContent = getGreeting();
-    });
+  const greetingElement = document.getElementById("greeting");
+  greetingElement.textContent = getGreeting();
 
+  // Check if the site is open
+  checkBusinessHours();
+});
+
+function checkBusinessHours() {
+  const now = new Date();
+  const hours = now.getHours();
+  const minutes = now.getMinutes();
+
+  // Define opening hours: 12:00 PM (12:00) to 10:30 PM (22:30)
+  const isAfterClosing = hours > 22 || (hours === 22 && minutes > 30);
+  const isBeforeOpening = hours < 12;
+
+  if (isAfterClosing || isBeforeOpening) {
+    // Display a "closed" message with animation, emojis, and logo
+    document.body.innerHTML = `
+      <div style="text-align: center; padding: 2rem; font-family: Arial, sans-serif; animation: fadeIn 2s;">
+        <div class="logo" style="margin-bottom: 1.5rem;">
+          <img src="logo.jpg" alt="Adler Eats Logo" style="width: 160px; border-radius: 16px; filter: drop-shadow(0 0 10px rgba(255, 174, 0, 0.4));">
+        </div>
+        <h1 style="font-size: 2.5rem; color: #e65100; animation: bounce 2s infinite;">😔 We're Sorry, We're Closed!</h1>
+        <p style="font-size: 1.2rem; color: #555; margin-top: 1rem; animation: fadeInUp 2s;">
+          We're open from <strong>12:00 PM</strong> to <strong>10:30 PM</strong>. Please come back during our operating hours. 
+          We can't wait to serve you! 🍟❤️
+        </p>
+        <p style="font-size: 1rem; color: #888; margin-top: 1.5rem; animation: fadeInUp 2s;">
+          Thank you for your patience and understanding! 🙏
+        </p>
+        <img src="https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif" alt="Sorry GIF" style="margin-top: 2rem; max-width: 80%; border-radius: 16px;">
+      </div>
+      <style>
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+          from { opacity: 0; transform: translateY(20px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+      </style>
+    `;
+  }
+}
     function selectItem(element, name, price) {
       document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('selected'));
       element.classList.add('selected');
@@ -218,14 +289,19 @@
       const now = new Date();
       const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
 
-      const apiKey = '3139113';
+      const apiKey = '3139113'; // Move to server-side
       const adminPhone = '+260974867751';
 
-      const adminMsg = `📦 New Order - Adler Eats\n👤 Name: ${name}\n📞 Contact: ${contact}\n🍽️ Order: ${selectedItem.name} x${qty}\n💰 Total: K${total}\n🕒 Time: ${time}\n📝 Notes: ${notes || 'None'}`;
+      const adminMsg = `📦 New Order - Adler Eats\n👤 Name: ${name}\n📞 Contact: ${contact}\n🍽️ Order: ${selectedItem.name} x${qty}\n💰 Total: K${total}\n🕒 Time: ${time}\n📝 Notes: ${notes}`;
       const customerMsg = `✅ Hi ${name}, your order for ${selectedItem.name} x${qty} (K${total}) has been received at ${time}. Thanks for using Adler Eats! 🍟`;
 
-      fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(adminPhone)}&text=${encodeURIComponent(adminMsg)}&apikey=${apiKey}`);
-      fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(contact)}&text=${encodeURIComponent(customerMsg)}&apikey=${apiKey}`);
+      // Handle errors
+      Promise.all([
+        fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(adminPhone)}&text=${encodeURIComponent(adminMsg)}&apikey=${apiKey}`),
+        fetch(`https://api.callmebot.com/whatsapp.php?phone=${encodeURIComponent(contact)}&text=${encodeURIComponent(customerMsg)}&apikey=${apiKey}`)
+      ]).catch(() => {
+        alert("Failed to submit your order. Please try again.");
+      });
 
       showPage('confirmation');
     }
